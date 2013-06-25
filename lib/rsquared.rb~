@@ -1,5 +1,0 @@
-require "Rsquared/version"
-
-module Rsquared
-  # Your code goes here...
-end
