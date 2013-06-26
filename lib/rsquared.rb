@@ -118,8 +118,8 @@ module Rsquared
 	 # tpdf(x, df) => Float
 	 # Returns height of Student's t-distribution for given x and degrees of freedom
 	 #
-	 def tpdf(score, df)
-	     (Math.gamma((df+1)/2.0)/(Math.sqrt(df*Math::PI)*Math.gamma(df/2.0)))*(1+(score**2/df))**(-(df+1)/2.0)
+	 def tpdf(x, df)
+	     (Math.gamma((df+1.0)/2.0)/(Math.sqrt(df*Math::PI)*Math.gamma(df/2.0)))*(1.0+(x**2)/df.to_f)**(-(df+1.0)/2.0)
 	 end
 
 	 ##
@@ -129,9 +129,9 @@ module Rsquared
 
 	 def tcdf(tscore, df, twosided=false)
 	     if tscore**2 > df then
-	     	return 0
+	     	return 0.0
 	     end
-	     pvalue = 0.5 - tscore.abs*(Math.gamma(0.5*(df+1))/(Math.sqrt(Math::PI*df)*Math.gamma(df/2.0)))*Math.hypergeom(0.5, 0.5*(df+1), 3.0/2.0, -(tscore**2/df))
+	     pvalue = 0.5 - tscore.abs*(Math.gamma(0.5*(df+1.0))/(Math.sqrt(Math::PI*df)*Math.gamma(df/2.0)))*Math.hypergeom(0.5, 0.5*(df+1.0), 3.0/2.0, -(tscore**2/df.to_f))
 	     if twosided then
 	     	return 2*pvalue
 	     else
