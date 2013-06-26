@@ -35,6 +35,25 @@ module Math
 	    return s.last*Math.exp(-x)*(x**a)
          end
 
+	 def self.invErf(x)
+	     c = []
+	     c[0] = 1.0
+	     c[1] = 1.0
+	     result = 0.0
+	     (0..100).each do |k|
+	     	# Calculate C sub k
+		if k > 1 then 
+		   c[k] = 0.0
+		   (0..(k-1)).each do |m|
+			term = (c[m]*c[k-1.0-m])/((m+1.0)*(2.0*m+1.0))
+			c[k] += term
+		    end
+		end
+		result += (c[k]/(2.0*k+1))*((Math.sqrt(Math::PI)/2)*x)**(2.0*k+1)
+	     end
+	     return result
+	 end 
+
        ##
        # Provides gamma function if not defined by ruby
        #
@@ -74,6 +93,8 @@ module Rsquared
 		lowerarea = 0.5*(1+Math.erf(lowerz/Math.sqrt(2)))
 		upperarea - lowerarea
          end
+
+
 	 ##
 	 # normalpdf(x) => Float
 	 # Returns height of standard normal curve at x
@@ -81,6 +102,18 @@ module Rsquared
 	 def normalpdf(zscore)
 		Math.exp((-zscore**2)/2.0)/Math.sqrt(2*Math::PI)
 	 end
+
+	 ##
+	 # invNorm(x) => Float
+	 # Useful results when -1 < x < 1
+	 # Returns z-score of supplied probability x
+	 #
+	 def invNorm(x)
+	     return -1e99 if x <= -1.0
+	     return 1e99 if x >= 1.0
+ 	     Math.sqrt(2)*Math.invErf(2*x-1)
+	 end 
+
 	 ##
 	 # tpdf(x, df) => Float
 	 # Returns height of Student's t-distribution for given x and degrees of freedom
@@ -125,6 +158,6 @@ module Rsquared
 	     ((x**(df/2.0-1))*Math.exp(-x/2.0))/((2**(df/2.0))*Math.gamma(df/2.0))
 	 end
 	 
-	 module_function :normalcdf, :normalpdf, :tpdf, :tcdf, :chicdf, :chipdf
+	 module_function :normalcdf, :normalpdf, :invNorm, :tpdf, :tcdf, :chicdf, :chipdf
   end
 end
