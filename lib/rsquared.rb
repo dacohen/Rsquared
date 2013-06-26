@@ -3,6 +3,9 @@ require "constants"
 require 'complex'
 
 module Math
+       ##
+       # Calculates the 2F1 Hypergeometic Function
+       #
        def self.hypergeom(a, b, c, z)
 	   s = []
 	   cj = []
@@ -15,6 +18,26 @@ module Math
 		return s.last
 	end
 
+	##
+	# Calculates the lower incomplete gamma function
+	#
+	def self.incompleteGamma(a, x)
+	    s = []
+	    gam = []
+	    gama = Math.gamma(a)
+	    gam[0] = Math.gamma(a+1)
+	    s[0] = (Math.gamma(a)/gam[0])
+	    (1..100).each do |n|
+	    	gam[n] = (a+n)*gam[n-1]
+		term = (gama/gam[n])*(x**n)
+		s[n] = s[n-1] + term
+	    end
+	    return s.last*Math.exp(-x)*(x**a)
+         end
+
+       ##
+       # Provides gamma function if not defined by ruby
+       #
        unless method_defined? :gamma then
        	 def self.gamma(z)
    	      if z.real < 0.5
@@ -35,13 +58,13 @@ end
 
 module Rsquared
   ##
-  # The Raw module implements statistical functions directly
+  # The Dists module implements statistical functions directly
   # For use by experts only
   # = Example
   #
-  # Rsquared::Raw::normalcdf(0, 1**99) => 0.5
+  # Rsquared::Dists::normalcdf(0, 1**99) => 0.5
   #
-  module Raw
+  module Dists
   	 ##
 	 # normalcdf(lower bound, upper bound) => Float
          # Returns area under standard normal curve between supplied values
@@ -82,7 +105,26 @@ module Rsquared
 		return pvalue
 	     end
 	 end
+
+	 ##
+	 # chicdf(chi, df) => Float
+	 # Returns the area in the upper tail of the chi-squared distribution with given degrees of freedom
+	 #
+
+	 def chicdf(chi, df)
+	     1-(Math.incompleteGamma(df/2.0, chi/2.0)/Math.gamma(df/2.0))
+	 end
+
+
+	 ##
+	 # chipdf(x, df) => Float
+	 # Returns the height of the chi-squared distribution with specified degrees of freedom at value x
+	 #
 	 
-	 module_function :normalcdf, :normalpdf, :tpdf, :tcdf
+	 def chipdf(x, df)
+	     ((x**(df/2.0-1))*Math.exp(-x/2.0))/((2**(df/2.0))*Math.gamma(df/2.0))
+	 end
+	 
+	 module_function :normalcdf, :normalpdf, :tpdf, :tcdf, :chicdf, :chipdf
   end
 end
