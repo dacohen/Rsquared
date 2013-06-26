@@ -1,6 +1,7 @@
 require "Rsquared/version"
 require "constants"
 require 'complex'
+require 'enumerableext.rb'
 
 module Math
        ##
@@ -76,6 +77,32 @@ end
 	      
 
 module Rsquared
+
+  class JarqueBeraTest
+  	def initialize(data)
+	    @data = data
+	    jb = (@data.length/6.0)*(@data.skew**2+0.25*(@data.kurtosis-3.0)**2)
+	    @pvalue = Dists::chicdf(jb, 2)
+
+	    @checkstat = ((@data.length - 20)/10.0).to_i
+	    if @pvalue > JBThresh[@checkstat] then
+	       @significance = false
+	    else
+	       @significance = true
+	    end
+	    return @pvalue
+	end
+
+	def significant?
+	    return @significance
+	end 
+
+	def inspect
+	   return @pvalue
+	end
+  end	   
+    
+
   ##
   # The Dists module implements statistical functions directly
   # For use by experts only
