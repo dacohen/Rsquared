@@ -1,6 +1,7 @@
 # Rsquared
 
-TODO: Write a gem description
+A full featured Ruby statistics library with assumption verification to make using statistics easy, 
+even with no background.
 
 ## Installation
 
@@ -18,7 +19,8 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+You can access "expert" functions using the Dists module as follows:
+    $ Rsquared::Dists::invNorm(0.5)
 
 ## Contributing
 
