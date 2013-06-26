@@ -3,6 +3,8 @@
 A full featured Ruby statistics library with assumption verification to make using statistics easy, 
 even with no background.
 
+[![Build Status](https://travis-ci.org/dacohen/Rsquared.png)](https://travis-ci.org/dacohen/Rsquared)
+
 ## Installation
 
 Add this line to your application's Gemfile:
@@ -20,7 +22,7 @@ Or install it yourself as:
 ## Usage
 
 You can access "expert" functions using the Dists module as follows:
-    $ Rsquared::Dists::invNorm(0.5)
+    >> Rsquared::Dists::invNorm(0.5)
 
 ## Contributing
 

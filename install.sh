@@ -1,8 +1,8 @@
 #! /usr/bin/env bash
 
 version=$(ruby -e "require './lib/Rsquared/version.rb'" -e "puts Rsquared::VERSION")
-echo $version
 
+bundle install
 gem build Rsquared.gemspec
-gem install Rsquared-0.0.1.gem
+gem install Rsquared-"$version".gem
 
