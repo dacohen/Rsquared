@@ -78,29 +78,47 @@ end
 
 module Rsquared
 
-  class JarqueBeraTest
+  ##
+  # KSTest implements the Kolomogorov-Smirnov test for normality
+  # kstest = Rsquared::KSTest.new(data)
+  # kstest.normal? => Boolean, indicates normality of data at 5% confidence
+  # 
+
+  class KSTest
   	def initialize(data)
 	    @data = data
-	    jb = (@data.length/6.0)*(@data.skew**2+0.25*(@data.kurtosis-3.0)**2)
-	    @pvalue = Dists::chicdf(jb, 2)
-
-	    @checkstat = ((@data.length - 20)/10.0).to_i
-	    if @pvalue > JBThresh[@checkstat] then
-	       @significance = false
-	    else
-	       @significance = true
+	    i = 0
+	    fn = 0.0
+	    d = []
+	    (@data.std.min..@data.std.max).step(1.0) do |x|
+	    	# Calculate Fn
+		@data.std.each do |pt|
+		  fn += 1 if pt <= x
+		end
+		d[i] = fn/@data.std.length.to_f - Dists::normalcdf(-1e99, x)
+		fn = 0.0
+		i += 1
 	    end
-	    return @pvalue
-	end
+	    @ksstat = d.max
+	    return @ksstat
+	 end
 
-	def significant?
-	    return @significance
-	end 
+	 def significant?
+	     if @ksstat > Dists::kscv(@data.length) then
+	     	return true
+	     else
+		return false
+	     end
+	 end
 
-	def inspect
-	   return @pvalue
-	end
-  end	   
+	 def normal?
+	     !self.significant?
+	 end
+
+	 def inspect
+	     @ksstat
+	 end
+  end
     
 
   ##
@@ -184,7 +202,28 @@ module Rsquared
 	 def chipdf(x, df)
 	     ((x**(df/2.0-1))*Math.exp(-x/2.0))/((2**(df/2.0))*Math.gamma(df/2.0))
 	 end
-	 
-	 module_function :normalcdf, :normalpdf, :invNorm, :tpdf, :tcdf, :chicdf, :chipdf
+	
+	##
+	# kscv(n) => Float
+	# Estimates the 5% critical value of the Kolomogorov-Smirnov distribution given sample size
+	#
+	
+	def kscv(n)
+	    if n < 1 then
+	       return 0
+	    elsif n < 21 then
+	       return KSCV[n-1]
+	    elsif n > 20 and n <= 25 then
+	       return 0.270
+	    elsif n > 25 and n <= 30 then
+	       return 0.240
+	    elsif n > 30 and n <= 35 then
+	       return 0.230
+	    elsif n > 35 then
+	       return 1.36/Math.sqrt(n)
+	    end
+	end
+ 
+	 module_function :normalcdf, :normalpdf, :invNorm, :tpdf, :tcdf, :chicdf, :chipdf, :kscv
   end
 end

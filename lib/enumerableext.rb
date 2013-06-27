@@ -27,4 +27,12 @@ module Enumerable
 	   fourthmoment = fourthsum/self.length.to_f
 	   return fourthmoment / (self.variance)**2
        end
+
+       def std
+       	   result = []
+       	   (0..self.length-1).each do |i|
+	   	result[i] = (self[i] - self.mean)/self.stddev
+	   end
+	   return result
+       end
 end
