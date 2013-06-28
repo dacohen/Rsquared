@@ -3,7 +3,11 @@
 A full featured Ruby statistics library with assumption verification to make using statistics easy, 
 even with no background.
 
+Travis-CI:
 [![Build Status](https://travis-ci.org/dacohen/Rsquared.png)](https://travis-ci.org/dacohen/Rsquared)
+
+CodeClimate:
+[![Code Climate](https://codeclimate.com/github/dacohen/Rsquared.png)](https://codeclimate.com/github/dacohen/Rsquared)
 
 ## Installation
 
