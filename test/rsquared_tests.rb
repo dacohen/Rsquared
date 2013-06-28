@@ -17,6 +17,16 @@ class RsquaredTests < Test::Unit::TestCase
 	  assert kstest.normal?
       end
 
+      def test_TTest
+      	  ttest = Rsquared::TTest.new($data, 0, Rsquared::Two.sided)
+	  assert_in_delta 0.0763, ttest.inspect, 0.001
+	  refute ttest.significant?
+
+	  ttest = Rsquared::TTest.new($data, 0, Rsquared::Upper.tail)
+	  assert_in_delta 0.03813, ttest.inspect, 0.001
+	  assert ttest.significant?
+      end
+
       def test_Grubbs
       	  grubbs = Rsquared::GrubbsTest.new($data)
 	  assert_in_delta 2.21, grubbs.statistic, 0.01
@@ -27,5 +37,6 @@ class RsquaredTests < Test::Unit::TestCase
 	  grubbs = Rsquared::GrubbsTest.new(data)
 	  assert grubbs.significant?
 	  assert grubbs.outlier?
+
       end
 end
