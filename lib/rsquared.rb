@@ -14,6 +14,10 @@ module Rsquared
   # 
 
   class KSTest
+  	##
+	# Intitializes the test object with an array of numerical data
+	#
+
   	def initialize(data)
 	    @data = data.std.sort!
 	    fn = 0
@@ -28,6 +32,10 @@ module Rsquared
 	    @ksstat = d.max
 	    return @ksstat
 	 end
+	 
+	 ##
+	 # Returns a boolean indiciating the significance of the test a the 5% level
+	 #
 
 	 def significant?
 	     if @ksstat > Helper::kscv(@data.length) then
@@ -37,6 +45,10 @@ module Rsquared
 	     end
 	 end
 
+	 ##
+	 # Returns logical opposite of significance
+	 #
+
 	 def normal?
 	     !self.significant?
 	 end
@@ -44,6 +56,10 @@ module Rsquared
 	 def inspect
 	     significant?
 	 end
+	 
+	 ##
+	 # Returns the test statistic
+	 #
 
 	 def statistic
 	     @ksstat
@@ -57,13 +73,21 @@ module Rsquared
   #
 
   class GrubbsTest
+	  ##
+	  # Initializes the Test object with an array of numerical data
+	  #
+
 	  def initialize(data)
 	     @data = data.sort
    	     @gstat = [((@data.mean - @data.min)/@data.stddev).abs, ((@data.mean - @data.max)/@data.stddev).abs].max
 	  end
+	  
+	  ##
+	  # Returns a boolean indicating the significance of the test at the 5% level
+	  #	  
 
-	  def significant?
-	     if @gstat > Helper::grubbscv(@data.length) then
+	  def significant?(alpha=0.05)
+	     if @gstat > Helper::grubbscv(@data.length, alpha) then
 	     	return true
 	     else
 		return false
@@ -73,6 +97,10 @@ module Rsquared
 	  def inspect
 	      significant?
 	  end
+
+	  ##
+	  # Returns the test statistic as a float
+	  #
 
 	  def statistic
 	      @gstat
@@ -112,11 +140,12 @@ module Rsquared
 	end
 
 	##
-	# grubbscv(n) => Float
+	# grubbscv(n, alpha) => Float
 	# Calculates the Grubbs critical value
+	#
 	
-	def grubbscv(n)
-	    tcv = Distribution::T::p_value(0.05/(2*n), n-2)
+	def grubbscv(n, alpha)
+	    tcv = Distribution::T::p_value(alpha/(2*n), n-2)
 	    return ((n-1)/Math.sqrt(n))*Math.sqrt(tcv**2/((n-2)+tcv**2))
 	end
  

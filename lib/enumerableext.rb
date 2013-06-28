@@ -9,7 +9,15 @@ module Enumerable
 
        def variance
        	   varsum = self.inject(0){|acc, i| acc + (i - self.mean)**2}
-	   return(varsum/self.length.to_f)
+	   return(varsum/(self.length.to_f-1.0))
+       end
+
+       def popvariance
+       	   return self.variance*((self.length.to_f-1.0)/self.length.to_f)
+       end
+
+       def popstddev
+       	   return Math.sqrt(self.popvariance)
        end
 
        def stddev
@@ -19,13 +27,13 @@ module Enumerable
        def skew
        	   thirdsum = self.inject(0){|acc, i| acc + (i - self.mean)**3}
 	   thirdmoment = thirdsum/self.length.to_f
-	   return thirdmoment / (self.variance)**(3.0/2.0)
+	   return thirdmoment / (self.popvariance)**(3.0/2.0)
        end
 
        def kurtosis
        	   fourthsum = self.inject(0){|acc, i| acc + (i - self.mean)**4}
 	   fourthmoment = fourthsum/self.length.to_f
-	   return fourthmoment / (self.variance)**2
+	   return (fourthmoment / (self.popvariance)**2)
        end
 
        def std

@@ -21,8 +21,10 @@ Or install it yourself as:
 
 ## Usage
 
-You can access "expert" functions using the Dists module as follows:
-    >> Rsquared::Dists::invNorm(0.5)
+You can run a statistical test, with assumption checking by supplying an array of numerical data points:
+    >> ttest = Rsquared::TTest.new(data)
+    >> ttest.statistic #=> Float
+    >> ttest.significant? #=> Boolean
 
 ## Contributing
 
