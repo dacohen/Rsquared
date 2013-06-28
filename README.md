@@ -22,6 +22,7 @@ Or install it yourself as:
 ## Usage
 
 You can run a statistical test, with assumption checking by supplying an array of numerical data points:
+
     >> ttest = Rsquared::TTest.new(data)
     >> ttest.statistic #=> Float
     >> ttest.significant? #=> Boolean
