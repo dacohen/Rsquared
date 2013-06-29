@@ -64,8 +64,7 @@ module Rsquared
 	       return [(1.0-pvalue)*2.0, pvalue*2.0].min
 	    end
         end
-	    
 
-	 module_function :kscv, :grubbscv, :adjustForSided
+	 module_function :kscv, :grubbscv
   end
 end

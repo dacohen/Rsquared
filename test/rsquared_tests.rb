@@ -32,6 +32,10 @@ class RsquaredTests < Test::Unit::TestCase
       	  proptest = Rsquared::PropTest.new($propdata, 0.5, Rsquared::Upper.tail)
 	  assert_in_delta 0.080757, proptest.inspect, 0.001
 	  refute proptest.significant?
+	  
+	  assert_raise(Rsquared::AssumptionError) do
+	  	proptest = Rsquared::PropTest.new([1, 1, 1, 1, 1, 0, 0, 0, 0, 0], 0.5, Rsquared::Upper.tail)
+	  end
       end
 
       def test_Grubbs

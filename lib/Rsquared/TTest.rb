@@ -26,7 +26,8 @@ module Rsquared
 	    end
 
 	    @tstat = (@data.mean - @mu0)/(data.stddev/Math.sqrt(@data.length))
-	    @pvalue = Helper::adjustForSided(Distribution::T::cdf(@tstat, @data.length-1), @sided)
+	    @pvalue = Distribution::T::cdf(@tstat, @data.length-1)
+	    self.setSidedness!(@sided)
 	 end
 
 	 ##
