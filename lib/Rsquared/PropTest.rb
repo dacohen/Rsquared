@@ -11,7 +11,7 @@ module Rsquared
 		 end
 		 
 		 @stderr = Math.sqrt((@p0*(1.0-@p0))/@data.length)
-		 @pstat = ((@data.sum/@data.length) - @p0)/@stderr
+		 @pstat = ((@data.sum.to_f/@data.length.to_f) - @p0)/@stderr
 		 @pvalue = Distribution::Normal::cdf(@pstat)
 		 self.setSidedness!(@sided)
 	    end
