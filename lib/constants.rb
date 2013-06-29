@@ -18,7 +18,4 @@ module Rsquared
 	     	 return true
 	     end
        end
-
-       class AssumptionError < StandardError
-       end
 end

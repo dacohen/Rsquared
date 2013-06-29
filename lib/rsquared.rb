@@ -5,9 +5,11 @@ require "constants"
 require "complex"
 require "enumerableext.rb"	      
 
+require 'Rsquared/StatTest'
 require 'Rsquared/KSTest'
 require 'Rsquared/GrubbsTest'
 require 'Rsquared/TTest'
+require 'Rsquared/PropTest'
 
 module Rsquared
 
@@ -50,6 +52,20 @@ module Rsquared
 	    return ((n-1)/Math.sqrt(n))*Math.sqrt(tcv**2/((n-2)+tcv**2))
 	end
  
-	 module_function :kscv, :grubbscv
+
+	##
+	# Modifies p-value to account for tails and/or two-sided tests
+	#
+	
+	def adjustForSided(pvalue, sided)
+	    if sided == Upper.tail then
+	       return 1.0-pvalue
+	    elsif sided == Two.sided then
+	       return [(1.0-pvalue)*2.0, pvalue*2.0].min
+	    end
+        end
+	    
+
+	 module_function :kscv, :grubbscv, :adjustForSided
   end
 end
